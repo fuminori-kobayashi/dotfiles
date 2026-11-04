@@ -59,8 +59,10 @@ Claude Code の中だけで効き、普段のシェルの `$EDITOR` / `$VISUAL` 
 - 名前に `notepad` を含めているのは、Claude Code に GUI エディタと判定させるため。
   GUI エディタでないと判定されると、Claude Code はエディタを起動する前に自分の画面を消すので、
   後ろの Claude のペインが空になる。名前を変えるときは `notepad` を残す（`code` は含めない）。
-- GUI エディタと判定されるので、ファイルを開くだけの場面（`/memory` など）では Claude Code は Emacs の終了を待たず、
-  開いている間も Claude を操作できる。行番号の指定（`+行番号`）は渡されない。
+- プロンプトの編集（`C-x C-e`）では、Claude Code は Emacs が終了するまで待つ。その間はフッターに
+  `Save and close editor to continue...` と出て、Claude のペインにフォーカスを移しても操作できない。
+- ファイルを開くだけの場面（`/memory` など）では、GUI エディタと判定されるので、Claude Code は Emacs の終了を待たずに戻る。
+  行番号の指定（`+行番号`）は渡されない。
 - tmux の外では、ファイルを開くだけの場面で Emacs が開かない（端末から切り離して起動されるため）。
 
 ## 補足: tmux 3.8 未満で使う

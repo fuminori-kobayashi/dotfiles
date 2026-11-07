@@ -325,7 +325,7 @@
  '(org-agenda-files nil)
  '(package-selected-packages
    (quote
-    (xref-js2 dumb-jump js2-mode magit gnu-elpa-keyring-update tide ztree yaml-mode php-mode rjsx-mode web-mode prettier-js flycheck company))))
+    (diff-hl xref-js2 dumb-jump js2-mode magit gnu-elpa-keyring-update tide ztree yaml-mode php-mode rjsx-mode web-mode prettier-js flycheck company))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -436,5 +436,27 @@
 ;; e.g. (add-hook 'some-log-mode-hook 'auto-revert-tail-mode)
 
 ;; End Auto-revert settings
+
+;;-------------------------------------
+;; diff-hl --- https://github.com/dgutov/diff-hl
+;; git の変更行を左端に色で表示（緑:追加 / 青:変更 / 赤:削除）
+;;
+;; [install]
+;; M-x package-install => diff-hl
+;;
+;; C-x v [ / C-x v ] : 前 / 次の変更箇所へ移動
+;; C-x v *           : カーソル位置の変更内容を表示
+;; C-x v n           : カーソル位置の変更を元に戻す（revert hunk）
+;;-------------------------------------
+(require 'diff-hl)
+(global-diff-hl-mode 1)
+(diff-hl-flydiff-mode 1)                      ; 保存前の編集中にも表示を更新
+(add-hook 'dired-mode-hook #'diff-hl-dired-mode) ; dired でも変更ファイルを表示
+;; ターミナル（emacs -nw）では fringe が無いので margin に表示する
+(unless (display-graphic-p)
+  (diff-hl-margin-mode 1))
+;; magit で commit / stage したら表示を更新する
+(add-hook 'magit-pre-refresh-hook #'diff-hl-magit-pre-refresh)
+(add-hook 'magit-post-refresh-hook #'diff-hl-magit-post-refresh)
 
 ;;; init.el ends here

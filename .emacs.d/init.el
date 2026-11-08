@@ -324,8 +324,7 @@
  ;; If there is more than one, they won't work right.
  '(org-agenda-files nil)
  '(package-selected-packages
-   (quote
-    (diff-hl xref-js2 dumb-jump js2-mode magit gnu-elpa-keyring-update tide ztree yaml-mode php-mode rjsx-mode web-mode prettier-js flycheck company))))
+   '(add-node-modules-path company copilot diff-hl dumb-jump flycheck magit markdown-mode php-mode prettier-js rjsx-mode tide typescript-mode web-mode yaml-mode ztree)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

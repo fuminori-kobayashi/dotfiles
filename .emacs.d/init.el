@@ -292,14 +292,23 @@
 ;;-------------------------------------
 ;; MSYS2 では使わない。Node.js が Windows 版で MSYS2 形式のパス（/home/...）を読めず、
 ;; tsserver がファイルを開けないので、定義へのジャンプも補完も働かない（xref は dumb-jump を使う）。
+;; tide（tsserver）は TypeScript のプロジェクトでだけ起動する。ほかのプロジェクトで .js や .php を開いても起動しない。
+;; 判定にあてはまらないプロジェクトで使いたいときは M-x setup-tide-mode。
+(defun my-project-uses-typescript-p ()
+  "開いているファイルの上位に tsconfig.json か jsconfig.json があれば non-nil。"
+  (let ((dir (or buffer-file-name default-directory)))
+    (or (locate-dominating-file dir "tsconfig.json")
+        (locate-dominating-file dir "jsconfig.json"))))
+
 (defun setup-tide-mode ()
   (interactive)
   (unless (eq system-type 'cygwin)
-    (tide-setup)
+    (when (or (called-interactively-p 'any) (my-project-uses-typescript-p))
+      (tide-setup)
+      (tide-hl-identifier-mode +1))
     (flycheck-mode +1)
     (setq flycheck-check-syntax-automatically '(save mode-enabled))
     (eldoc-mode +1)
-    (tide-hl-identifier-mode +1)
     ;; company is an optional dependency. You have to
     ;; install it separately via package-install
     ;; `M-x package-install [ret] company`

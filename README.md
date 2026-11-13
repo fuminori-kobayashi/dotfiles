@@ -7,6 +7,7 @@ macOS、Linux、WSL (Ubuntu)、Windows の MSYS2 で使う。MSYS2 で使うと�
 | `.emacs.d/init.el` | `~/.emacs.d/init.el` | Emacs の設定 |
 | `.tmux.conf` | `~/.tmux.conf` | tmux の設定 |
 | `claude/` | `~/.local/bin/`、`~/.claude/` | Claude Code のプロンプトを Emacs で編集する設定（[README](claude/README.md)） |
+| `windows/` | `~/.local/bin/` | WSL の tmux でペインを移動したら IME を OFF にするツール（[README](windows/README.md)） |
 | `javascript/` | 各プロジェクトのルート | ESLint / Prettier の設定の雛形（[README](javascript/README.md)） |
 
 ## 前提

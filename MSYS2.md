@@ -28,6 +28,7 @@ Windows Terminal で MSYS2 の bash を開き、その中で tmux と Claude Cod
   JavaScript / TypeScript の定義へのジャンプ（`C-x j`、`M-.`）は dumb-jump で探す。
 - `.tmux.conf` は MSYS2 では、コピーを `/dev/clipboard` に書き（`clip.exe` は日本語が化ける）、`escape-time` を 100ms にする
   （10ms だとマウスのエスケープシーケンスを読み切れず、`MMMM...` がペインに入力される）。
+- ペインを移動したら IME を OFF にするのは、WSL と同じ `~/.local/bin/ime-off.exe` を使う（[windows/README](windows/README.md) の MSYS2 の手順でビルドする）。
 
 ## Betterleaks
 

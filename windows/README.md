@@ -2,12 +2,16 @@
 
 | ファイル | 置き場所 | 内容 |
 | --- | --- | --- |
-| `ime-off.cs` | `~/.local/bin/ime-off.exe`（ビルドして置く） | 前面のウィンドウの IME を OFF にする。WSL の tmux でペインを移動したときに呼ぶ |
+| `ime-off.cs` | `~/.local/bin/ime-off.exe`（ビルドして置く） | 前面のウィンドウの IME を OFF にする。WSL / MSYS2 の tmux でペインを移動したときに呼ぶ |
 
 ## ビルド
 
 Windows に最初から入っている .NET Framework の `csc.exe` でビルドする。Visual Studio などは要らない。
-WSL では、リポジトリのルートで次を実行する。
+リポジトリのルートで、環境に合わせて下の WSL か MSYS2 のコマンドを実行する。
+
+`.tmux.conf` は `~/.local/bin/ime-off.exe` があるときだけ hook を登録するので、ビルドしたあとで `tmux source ~/.tmux.conf` を実行する。
+
+### WSL
 
 ```sh
 /mnt/c/Windows/Microsoft.NET/Framework64/v4.0.30319/csc.exe /nologo \
@@ -15,7 +19,14 @@ WSL では、リポジトリのルートで次を実行する。
 chmod +x ~/.local/bin/ime-off.exe
 ```
 
-`.tmux.conf` は `~/.local/bin/ime-off.exe` があるときだけ hook を登録するので、ビルドしたあとで `tmux source ~/.tmux.conf` を実行する。
+### MSYS2
+
+オプションを `/nologo` のように書くと MSYS2 がパスに変換してしまうので、`-` で書く。
+
+```sh
+/c/Windows/Microsoft.NET/Framework64/v4.0.30319/csc.exe -nologo \
+  -out:"$(cygpath -w ~/.local/bin/ime-off.exe)" "$(cygpath -w windows/ime-off.cs)"
+```
 
 ## 補足
 

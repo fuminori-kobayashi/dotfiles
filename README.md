@@ -20,7 +20,7 @@ macOS、Linux、WSL (Ubuntu)、Windows の MSYS2 で使う。MSYS2 で使うと�
 ## tmux のキーバインド
 
 標準から変えているもの。日本語入力のままでも移動できるように、移動は Ctrl を押したままのキーにしている。
-ペインを移動すると、macOS では入力ソースが ABC に、WSL と MSYS2 では IME が OFF になる。
+ペインを移動すると、macOS では入力ソースが ABC に、WSL と MSYS2 では IME が OFF に、Linux (IBus + Mozc) では英字入力になる。
 
 | キー | 動作 | 標準 |
 | --- | --- | --- |

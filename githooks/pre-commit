@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # コミットする内容に機密情報がないかを Betterleaks で調べる pre-commit フック。
-# 1日に1回、Homebrew で Betterleaks のアップデートを確認し、あれば先にアップデートする。
+# 1日に1回、Homebrew で Betterleaks のアップデートを確認し、あればアップデートするかを聞く
+# （断ったときは次の日にまた聞く。端末がないときは聞かずに、アップデートしないで進める）。
 #
 # 有効にする: git config core.hooksPath githooks
 # 一時的に飛ばす: git commit --no-verify
@@ -28,11 +29,29 @@ update_betterleaks() {
     echo "betterleaks: brew update に失敗したので、アップデートを飛ばします" >&2
     return 0
   fi
-  if [ -n "$(HOMEBREW_NO_AUTO_UPDATE=1 brew outdated --quiet betterleaks 2>/dev/null)" ]; then
-    echo "betterleaks: アップデートします" >&2
-    HOMEBREW_NO_AUTO_UPDATE=1 brew upgrade --quiet betterleaks >&2 ||
-      echo "betterleaks: アップデートに失敗しました。今のバージョンでスキャンします" >&2
+  local outdated answer=""
+  outdated=$(HOMEBREW_NO_AUTO_UPDATE=1 brew outdated --verbose betterleaks 2>/dev/null)
+  [ -n "$outdated" ] || return 0
+  echo "betterleaks: アップデートがあります: $outdated" >&2
+
+  # git はフックの標準入力を端末につながないので、/dev/tty から答えを読む。
+  # 端末がない（Claude Code、エディタの git 連携など）ときは聞けないので、アップデートせずに進める。
+  if ! { : </dev/tty; } 2>/dev/null; then
+    echo "betterleaks: 端末がないので確認できません。アップデートせずに進めます（上げるなら brew upgrade betterleaks）" >&2
+    return 0
   fi
+  printf 'betterleaks: アップデートしてからコミットしますか？ [y/N] ' >&2
+  read -r answer </dev/tty || answer=""
+  case "$answer" in
+    [yY]*)
+      echo "betterleaks: アップデートします" >&2
+      HOMEBREW_NO_AUTO_UPDATE=1 brew upgrade --quiet betterleaks >&2 ||
+        echo "betterleaks: アップデートに失敗しました。今のバージョンでスキャンします" >&2
+      ;;
+    *)
+      echo "betterleaks: アップデートせずに進めます" >&2
+      ;;
+  esac
 }
 
 if ! command -v betterleaks >/dev/null 2>&1 && ! command -v brew >/dev/null 2>&1; then
